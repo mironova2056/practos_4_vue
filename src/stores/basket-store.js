@@ -1,66 +1,71 @@
-import {defineStore} from "pinia";
-import {useMainStore} from "@/stores/main-store.js";
+import { defineStore } from 'pinia';
+import { useMainStore } from '@/stores/main-store.js'; 
 
-export const useBasketStore = defineStore("basket-store", {
-    state:() => ({
+export const useBasketStore = defineStore('BasketStore', {
+    state: () => ({
         basketProducts: [],
-        orderProducts: [],
+        ordersProducts: [],
     }),
+
     getters: {
         getBasketProducts: (state) => state.basketProducts,
     },
+
     actions: {
-        getToken(){
+        getToken() {
             const mainStore = useMainStore();
             return mainStore.token;
         },
-        async addToBasket(productId){
-            const token = this.getToken();
-            try{
-               const response = await fetch(`${import.meta.env.VITE_API_URL}cart/${productId}`, {
-                   method: "POST",
-                   headers: {
-                       'Authorization': `Bearer ${token}`,
-                   },
-               });
-               await this.getProducts();
-            }catch(error){
-                console.log('Ошибка при добавлении товара в корзину:', error);
-            }
-        },
-        async removeFromBasket(productId){
+        async addToBasket(productId) {
             const token = this.getToken();
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}cart/${productId}`, {
-                    method: "DELETE",
+                    method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+
                 await this.getProducts();
-            }catch (error) {
+            } catch (error) {
+                console.error('Ошибка при добавлении товара в корзину:', error);
+            }
+        },
+        async removeFromBasket(productId) {
+            const token = this.getToken();
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}cart/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+
+                await this.getProducts();
+            } catch (error) {
                 console.error('Ошибка при удалении товара из корзины:', error);
             }
         },
-        async getProducts(){
+        async getProducts() {
             const token = this.getToken();
-            try{
-                const response = await fetch(`${import.meta.env.VITE_API_URL}cart${token}`, {
-                    method: "GET",
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}cart`, {
+                    method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
+
                 const data = await response.json();
                 this.basketProducts = data.data.map(item => {
                     item.quantity = item.quantity || 1;
                     return item;
-                })
-            }catch (error) {
+                });
+            } catch (error) {
                 console.error('Ошибка при получении корзины:', error);
             }
         },
-        async getOrders(){
+        async getOrders() {
             const token = this.getToken();
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}order`, {
@@ -77,7 +82,7 @@ export const useBasketStore = defineStore("basket-store", {
                 console.error('Ошибка при получении корзины:', error);
             }
         },
-        async addToOrders(productId){
+        async addToOrders() {
             const token = this.getToken();
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}order`, {
@@ -93,12 +98,13 @@ export const useBasketStore = defineStore("basket-store", {
                 console.error('Ошибка при добавлении заказа:', error);
             }
         },
-        async updateQuantity(productId){
-            if(quntityChange > 0){
+
+        async updateQuantity(productId, quantityChange) {
+            if (quantityChange > 0) {
                 await this.addToBasket(productId);
-            }else {
+            } else {
                 await this.removeFromBasket(productId);
             }
         },
     },
-})
+});

@@ -1,12 +1,12 @@
 <script>
 import BasketCard from "@/components/BasketCard.vue";
-import {useBasketStore} from "@/stores/basket-store.js";
-import {useRouter} from "vue-router";
+import { useBasketStore } from '@/stores/basket-store.js';
+import { useRouter } from 'vue-router';
 
 export default {
-  name: "BasketPage",
+  name: 'BasketPage',
   components: {
-    BasketCard,
+    BasketCard
   },
   data() {
     return {
@@ -18,7 +18,7 @@ export default {
     groupedProducts() {
       return this.BasketStore.basketProducts.reduce((acc, product) => {
         if (!acc[product.product_id]) {
-          acc[product.product_id] = {products: [], count: 0};
+          acc[product.product_id] = { products: [], count: 0 };
         }
         acc[product.product_id].products.push(product);
         acc[product.product_id].count += product.quantity;
@@ -35,6 +35,7 @@ export default {
       basketItems.forEach(item => {
         item.classList.add('fade-out');
       });
+
       setTimeout(async () => {
         await this.BasketStore.addToOrders();
         this.BasketStore.basketProducts = [];
@@ -50,7 +51,6 @@ export default {
 
 <template>
   <div class="container">
-    <!-- Кнопка оформления заказа -->
     <div class="catalog">
       <button
           v-show="BasketStore.basketProducts.length > 0"
@@ -60,7 +60,6 @@ export default {
       </button>
     </div>
 
-    <!-- Секция товаров в корзине -->
     <section class="catalog-section">
       <h1 v-if="BasketStore.basketProducts.length === 0" class="empty-cart">
         Корзина пуста
@@ -122,6 +121,7 @@ export default {
   color: gray;
   margin-top: 50px;
 }
+
 
 .product-container {
   display: flex;

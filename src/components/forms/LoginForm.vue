@@ -27,49 +27,52 @@
 </template>
 
 <script>
-import {mapStores} from "pinia";
-import {useMainStore} from "@/stores/main-store.js";
+import { mapStores } from 'pinia';
+import { useMainStore } from '@/stores/main-store.js';
 
 export default {
-  name: "LoginForm",
-  data(){
+  name: 'LoginForm',
+  data() {
     return {
-      loginForm:{
-        email:"",
-        password:"",
+      loginForm: {
+        email: '',
+        password: '',
       },
-      emailError:"",
-      passwordError:"",
+      emailError: '',
+      passwordError: '',
     };
   },
-  computed:{
+  computed: {
     ...mapStores(useMainStore),
   },
-  methods:{
-    validateLogin(){
+  methods: {
+    validateLogin() {
       this.emailError = '';
       this.passwordError = '';
       let isValid = true;
 
+      // Валидация email
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailPattern.test(this.loginForm.email)) {
         this.emailError = 'Неверный формат email';
         isValid = false;
       }
 
+      // Валидация пароля
       if (this.loginForm.password.length < 6) {
         this.passwordError = 'Пароль должен быть не менее 6 символов';
         isValid = false;
       }
+
       return isValid;
     },
-    async login(){
-      if(this.validateLogin()){
+    async login() {
+      if (this.validateLogin()) {
         await this.mainStore.login(this.loginForm);
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

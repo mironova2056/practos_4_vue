@@ -1,10 +1,9 @@
-
 <template>
   <div class="auth-container">
     <div class="auth-box">
       <div class="tabs">
-        <router-link to="login" class="tab" :class="{active: currentTab === 'login'}">Вход</router-link>
-        <router-link to="register" class="tab" :class="{ active: currentTab === 'register' }">Регистрация</router-link>}"
+        <router-link to="login" class="tab" :class="{ active: currentTab === 'login' }">Вход</router-link>
+        <router-link to="register" class="tab" :class="{ active: currentTab === 'register' }">Регистрация</router-link>
       </div>
       <router-view></router-view>
     </div>
@@ -13,19 +12,21 @@
 
 <script>
 export default {
-  name: "AuthPage",
+  name: 'AuthPage',
   data() {
     return {
-      currentTab: "register",
+      currentTab: 'register',
     };
   },
+
   watch: {
-    $rote(to){
+    $route(to) {
       this.currentTab = to.name === 'login' ? 'login' : 'register';
     },
   },
-}
+};
 </script>
+
 <style scoped>
 
 .auth-container {

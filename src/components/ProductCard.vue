@@ -48,7 +48,7 @@ export default {
       return `${import.meta.env.VITE_API_IMG}${this.card.image}`;
     },
     isAuthenticated(){
-      return this.mainStore.isAuthenticated();
+      return this.mainStore.isAuthenticated;
     }
   },
   methods:{

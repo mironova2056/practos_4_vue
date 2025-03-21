@@ -21,12 +21,12 @@ export default {
 
 <template>
   <section class="order-section">
-    <h1 v-if="orderStore.orderProducts.length === 0" class="no-orders">
+    <h1 v-if="orderStore.ordersProducts.length === 0" class="no-orders">
       Заказов нет
     </h1>
     <OrderCard :number-order="index + 1"
                :order="order"
-               v-for="(order,index) in orderStore.orderProducts"
+               v-for="(order,index) in orderStore.ordersProducts"
                :key="order.id"
     />
   </section>

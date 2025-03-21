@@ -1,11 +1,12 @@
 <template>
   <form @submit.prevent="register">
-    <h2>Ругистрация</h2>
+    <h2>Регистрация</h2>
     <div class="input-group">
       <input
           type="text"
           v-model="registerForm.fio"
           placeholder="ФИО"
+          required
           :class="{'input-error': fioError}"
       />
       <span v-if="fioError" class="error-message">{{ fioError }}</span>
@@ -29,61 +30,67 @@
           :class="{'input-error': passwordError}"
       />
       <span v-if="passwordError" class="error-message">{{ passwordError }}</span>
-      <button type="submit" class="btn">Зарегистрироваться</button>
     </div>
+    <button type="submit" class="btn">Зарегистрироваться</button>
   </form>
 </template>
 
 <script>
-import {mapStores} from "pinia";
-import {useMainStore} from "@/stores/main-store.js";
+import { mapStores } from 'pinia';
+import { useMainStore } from '@/stores/main-store.js';
 
 export default {
-  name: "RegisterForm",
-  data(){
+  name: 'RegisterForm',
+  data() {
     return {
-      registerForm:{
+      registerForm: {
         fio: '',
         email: '',
         password: '',
       },
-      emailError:"",
-      passwordError:"",
-      fioError:"",
+      emailError: '',
+      passwordError: '',
+      fioError: '',
     };
   },
-  computed:{
+  computed: {
     ...mapStores(useMainStore),
   },
-  methods:{
-    validateRegister(){
-      this.emailError = '',
+  methods: {
+    validateRegister() {
+      this.emailError = '';
       this.passwordError = '';
       this.fioError = '';
       let isValid = true;
 
-      if(!this.registerForm.fio || this.registerForm.fio.trim().length === 0){
+      // Валидация ФИО
+      if (!this.registerForm.fio || this.registerForm.fio.trim().length === 0) {
         this.fioError = 'ФИО обязательно';
         isValid = false;
       }
+
+      // Валидация email
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!emailPattern.test(this.registerForm.email)){
+      if (!emailPattern.test(this.registerForm.email)) {
         this.emailError = 'Неверный формат email';
         isValid = false;
       }
-      if(this.registerForm.password.length < 6 || this.registerForm.password.length > 20) {
+
+      // Валидация пароля
+      if (this.registerForm.password.length < 6 || this.registerForm.password.length > 20) {
         this.passwordError = 'Пароль должен быть от 6 до 20 символов';
         isValid = false;
       }
+
       return isValid;
     },
-    async register(){
-      if(this.validateRegister()){
+    async register() {
+      if (this.validateRegister()) {
         await this.mainStore.register(this.registerForm);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -1,69 +1,69 @@
 <script>
-import  {ref} from "vue";
-import {useBasketStore} from "@/stores/basket-store.js";
-import {useMainStore} from "@/stores/main-store.js";
-
+import { ref } from 'vue';
+import { useBasketStore } from '@/stores/basket-store.js';
+import { useMainStore } from '@/stores/main-store.js';
 export default {
-  name: "BasketCard",
-  props:{
-    product:{
+  name: 'BasketCard',
+  props: {
+    product: {
       type: Object,
-      required: true
+      required: true,
     },
-    groupCount:{
+    groupCount: {
       type: Number,
-      required: true
+      required: true,
     },
-    group:{
+    group: {
       type: Object,
-      required: true
+      required: true,
     },
   },
   mounted() {
     useMainStore().getCards()
   },
-  data(){
+  data() {
     return {
       quantity: ref(this.groupCount),
-      BasketStore: useBasketStore()
+      BasketStore: useBasketStore(),
     };
   },
   methods: {
-    increment(){
+    increment() {
       this.quantity++;
-      this.BasketStore.updateQuantity(this.product.product_id, 1);
+      this.BasketStore.updateQuantity(this.product.product_id, 1)
     },
-    decrement(){
-      if(this.quantity > 1){
+    decrement() {
+      if (this.quantity > 1) {
         this.quantity--;
         this.BasketStore.updateQuantity(this.product.id, -1)
       }
     },
-    async removeProduct(productId){
-      const productElement =document.getElementById(`product-${productId}`);
-      if(productElement){
+    async removeProduct(productId) {
+      const productElement = document.getElementById(`product-${productId}`);
+      if (productElement) {
         productElement.style.transition = 'opacity 0.5s';
         productElement.style.opacity = 0;
       }
       setTimeout(async () => {
-        for(const item of this.group.products){
+        for (const item of this.group.products) {
           await this.BasketStore.removeFromBasket(item.id);
         }
         await this.BasketStore.getProducts();
+
       }, 500);
     },
   },
-  computed:{
-    imgSrc(){
+  computed: {
+    imgSrc() {
       return `${import.meta.env.VITE_API_IMG}${this.product.image}`;
     },
   },
-  watch:{
-    groupCount(newCount){
+  watch: {
+    groupCount(newCount) {
       this.quantity = newCount;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <template>

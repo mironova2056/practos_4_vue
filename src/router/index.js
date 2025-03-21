@@ -10,7 +10,9 @@ const routes = [
             {name: 'register', path: 'register', component: () => import('@/components/forms/RegisterForm.vue')},
             {path: '', redirect: { name: 'register' }},
         ]
-    }
+    },
+    { name: 'basket', path: '/basket', component: () => import('@/pages/BasketPage.vue') },
+    { name: 'orders', path: '/orders', component: () => import('@/pages/OrdersPage.vue') },
 ];
 const router = createRouter({
     history: createWebHistory(),
