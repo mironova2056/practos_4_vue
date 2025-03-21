@@ -7,6 +7,7 @@ export const useMainStore = defineStore('main', {
         token: localStorage.getItem("token") || null,
         loginError: null,
         router: useRouter(),
+        cards: []
     }),
     getters: {
       isAuthenticated: (state) => !!state.token,
@@ -81,6 +82,22 @@ export const useMainStore = defineStore('main', {
             }catch (error) {
                 console.error('Ошибка при выходе:', error);
             }
+        },
+        async getCards() {
+            try{
+                const response = await fetch(`${import.meta.env.VITE_API_URL}products`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const result = await response.json();
+                this.cards = result.data || [];
+                console.log(this.cards);
+            }catch (error){
+                console.error('Ошибка при получении карточек:', error);
+            }
         }
+
     }
 })
