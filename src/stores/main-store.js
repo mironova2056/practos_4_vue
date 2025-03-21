@@ -65,6 +65,22 @@ export const useMainStore = defineStore('main', {
                 console.error('Ошибка при регистрации:', error);
                 alert('Произошла ошибка при регистрации');
             }
+        },
+        async logout() {
+            try{
+                const response = await fetch(`${import.meta.env.VITE_API_URL}logout`, {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    },
+                });
+                await this.router.push('/');
+                this.token = null;
+                localStorage.removeItem('token');
+                console.log('Выход выполнен успешно');
+            }catch (error) {
+                console.error('Ошибка при выходе:', error;
+            }
         }
     }
 })
