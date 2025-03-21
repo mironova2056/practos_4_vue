@@ -79,7 +79,7 @@ export const useMainStore = defineStore('main', {
                 localStorage.removeItem('token');
                 console.log('Выход выполнен успешно');
             }catch (error) {
-                console.error('Ошибка при выходе:', error;
+                console.error('Ошибка при выходе:', error);
             }
         }
     }
